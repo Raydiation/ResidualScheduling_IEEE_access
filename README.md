@@ -4,7 +4,7 @@
 
 Setup the virtual environment.
 ```c
-podman run -it --name={YOUR_NAME}   -v $PWS/ResidualScheduling:/ResidualScheduling pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
+podman run -it --name={YOUR_NAME}   -v $PWD/ResidualScheduling:/ResidualScheduling pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
 ```
 
 Install required packages in the environment.
