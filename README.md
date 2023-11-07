@@ -20,21 +20,21 @@ python3 train.py --date=train --instance_type=FJSP --data_size=10 --delete_node=
 ## Reproduced the result in paper
 Follow the example to run a FJSP testing 
 ```c
-test.py --date=test --instance_type=FJSP --delete_node=true --test_dir='./datasets/FJSP/Hurink_Data/Text/vdata' --load_model='./weight/RS_FJSP/best'
+python3 test.py --date=test --instance_type=FJSP --delete_node=true --test_dir='./datasets/FJSP/Brandimarte_Data' --load_weight='./weight/RS_FJSP/best'
 ```
 Follow the example to run a FJSP testing (RS+op)
 ```c
-test.py --date=test --instance_type=FJSP --test_dir='./datasets/FJSP/Hurink_Data/Text/vdata' --load_model='./weight/RS+op_FJSP/best'
+python3 test.py --date=test --instance_type=FJSP --test_dir='./datasets/FJSP/Brandimarte_Data' --load_weight='./weight/RS+op_FJSP/best'
 ```
 
 ### Similarly, for JSP
 Follow the example to run a JSP testing (RS)
 ```c
-test.py --date=test --instance_type=JSP --delete_node=true --test_dir='./datasets/JSP/public_benchmark/ta' --load_model='./weight/RS_JSP/best'
+python3 test.py --date=test --instance_type=JSP --delete_node=true --test_dir='./datasets/JSP/public_benchmark/ta' --load_weight='./weight/RS_JSP/best'
 ```
 Follow the example to run a JSP testing (RS+op)
 ```c
-test.py --date=test --instance_type=JSP --test_dir='./datasets/JSP/public_benchmark/ta' --load_model='./weight/RS+op_JSP/best'
+python3 test.py --date=test --instance_type=JSP --test_dir='./datasets/JSP/public_benchmark/ta' --load_weight='./weight/RS+op_JSP/best'
 ```
 
 ## Hyperparameters list
