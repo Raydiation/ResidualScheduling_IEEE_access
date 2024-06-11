@@ -9,7 +9,7 @@ podman run -it --name={YOUR_NAME}   -v $PWD/ResidualScheduling:/ResidualScheduli
 
 Install required packages in the environment.
 ```c
-pip install torch-geometric  opencv-python plotly matplotlib gym tensorboard pandas colorhash
+pip install torch-geometric==2.3.1  opencv-python plotly matplotlib gym tensorboard pandas colorhash
 ```
 ## Run training
 Follow the example to run a FJSP training procedure(RS). And there are some parameters for ablation studying.
