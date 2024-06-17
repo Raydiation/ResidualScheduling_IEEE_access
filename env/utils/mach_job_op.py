@@ -14,7 +14,6 @@ class Machine:
     def process_op(self, op_info):
         machine_avai_time = self.avai_time()
         start_time = max(op_info["current_time"], machine_avai_time)
-        assert start_time == op_info["current_time"]
         op_info["start_time"] = start_time
         finished_time = start_time + op_info["process_time"]
         self.processed_op_history.append(op_info)

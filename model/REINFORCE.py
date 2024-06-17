@@ -11,12 +11,12 @@ class REINFORCE(nn.Module):
     def __init__(self, args):
         super(REINFORCE, self).__init__()
         self.args = args
-        self.num_layers = args.policy_num_layers
+        self.policy_num_layers = args.policy_num_layers
         self.hidden_dim = args.hidden_dim
         self.gnn = GNN(args)
-        self.layers = torch.nn.ModuleList()
+        self.layers = torch.nn.ModuleList() # policy network
         self.layers.append(nn.Linear(self.hidden_dim * 2 + 1, self.hidden_dim))
-        for _ in range(self.num_layers - 2):
+        for _ in range(self.policy_num_layers - 2):
             self.layers.append(nn.Linear(self.hidden_dim, self.hidden_dim))
         self.layers.append(nn.Linear(self.hidden_dim, 1))
         
@@ -37,13 +37,12 @@ class REINFORCE(nn.Module):
         score = torch.empty(size=(0, self.args.hidden_dim * 2 + 1)).to(self.args.device)
 
         for op_info in avai_ops:
-            score = torch.cat((score, torch.cat((x_dict['m'][op_info['m_id']],
-                                                x_dict['op'][op_unfinished.index(op_info['node_id'])],
-                                                torch.tensor(op_info['process_time'] / max_process_time).to(torch.float32).to(self.args.device).unsqueeze(0)), dim=0).unsqueeze(0)), dim=0)
+            normalize_process_time = torch.tensor([op_info['process_time'] / max_process_time], dtype=torch.float32, device=self.args.device)
+            score = torch.cat((score, torch.cat((x_dict['m'][op_info['m_id']], x_dict['op'][op_unfinished.index(op_info['node_id'])], normalize_process_time), dim=0).unsqueeze(0)), dim=0)
 
-        for i in range(self.num_layers - 1):
+        for i in range(self.policy_num_layers - 1):
             score = F.leaky_relu(self.layers[i](score))
-        score = self.layers[self.num_layers - 1](score)
+        score = self.layers[self.policy_num_layers - 1](score)
 
         probs = F.softmax(score, dim=0).flatten()
         dist = Categorical(probs)

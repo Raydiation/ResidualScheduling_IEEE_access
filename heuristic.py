@@ -7,22 +7,20 @@ def heuristic_makespan(env, avai_ops, rule):
     if rule == "MOR":
         while True:
             action_idx = MOR(avai_ops, env.jsp_instance.jobs)
-
             avai_ops, _, done = env.step(avai_ops[action_idx])
-
             if done:
                 return env.get_makespan()
+
     if rule == "FIFO":
          while True:
             action_idx = FIFO(avai_ops, env.jsp_instance.jobs)
-
             avai_ops, _, done = env.step(avai_ops[action_idx])
             if done:
                 return env.get_makespan()
+
     if rule == "SPT":
          while True:
             action_idx = SPT(avai_ops)
-
             avai_ops, _, done = env.step(avai_ops[action_idx])
             if done:
                 return env.get_makespan()
@@ -30,9 +28,7 @@ def heuristic_makespan(env, avai_ops, rule):
     if rule == "MWKR":
         while True:
             action_idx = MWKR(avai_ops, env.jsp_instance.jobs)
-
             avai_ops, _, done = env.step(avai_ops[action_idx])
-
             if done:
                 return env.get_makespan()
 

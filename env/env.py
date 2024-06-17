@@ -18,8 +18,7 @@ class JSP_Env(gym.Env):
     
     def reset(self):
         self.jsp_instance.reset()
-        avai_ops = self.jsp_instance.current_avai_ops()
-        return avai_ops
+        return self.jsp_instance.current_avai_ops()
        
     def done(self):
         return self.jsp_instance.done()
@@ -32,6 +31,5 @@ class JSP_Env(gym.Env):
         
     def load_instance(self, filename):
         self.jsp_instance.load_instance(filename)
-        avai_ops = self.jsp_instance.current_avai_ops()
-        return avai_ops
+        return self.jsp_instance.current_avai_ops()
     
