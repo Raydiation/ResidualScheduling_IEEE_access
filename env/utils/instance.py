@@ -8,15 +8,11 @@ import time
 
 class JSP_Instance:
     def __init__(self, args):
-        self.args = args
-        self.process_time_range = [1, args.max_process_time]
+        self.args, self.process_time_range = args, [1, args.max_process_time]
 
-        self.job_num = 0
-        self.machine_num = 0
-        self.op_num = 0
+        self.job_num, self.machine_num = 0, 0
 
-        self.jobs = []
-        self.machines = []
+        self.jobs, self.machines = [], []
         self.time_stamp = []
         self.current_time = 0
         self.max_process_time = 0
@@ -44,7 +40,6 @@ class JSP_Instance:
         self.graph = Graph(self.args, self.job_num, self.machine_num)
         for i in range(job_num):
             self.graph.add_job(self.jobs[i])
-        self.graph.op_unfinished = [i for i in range(self.graph.op_num)]
         
     def reset(self):
         self.job_num = random.randint(3, self.args.data_size)
@@ -102,7 +97,6 @@ class JSP_Instance:
         self.graph = Graph(self.args, self.job_num, self.machine_num)
         for i in range(self.job_num):
             self.graph.add_job(self.jobs[i])
-        self.graph.op_unfinished = [i for i in range(self.graph.op_num)]
         
         self.register_time(0)
 

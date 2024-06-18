@@ -2,11 +2,12 @@ import torch
 from torch_geometric.data import HeteroData
 import numpy as np
 import time
+from bisect import bisect_left
+
 AVAILABLE = 0
 PROCESSED = 1
 COMPLETE = 3
 FUTURE = 2
-from bisect import bisect_left
 
 def binary_search(list_, target):
     left, right = 0, len(list_)
@@ -21,17 +22,17 @@ class Graph:
         self.op_edge_idx = torch.empty(size=(1,0), dtype=torch.int64)                           # for op<->m
         self.m_edge_idx = torch.empty(size=(1,0), dtype=torch.int64)                            # for op<->m
         self.m_m_edge_idx = torch.tensor([[i for i in range(machine_num)]], dtype=torch.int64)  # for m<->m
+        self.edge_x = torch.empty(size=(1,0), dtype=torch.int64)
 
         self.op_x = []
         self.m_x = []
-        self.edge_x = torch.empty(size=(1,0), dtype=torch.int64)
 
         self.args = args
         self.job_num = job_num
         self.machine_num = machine_num
         self.op_num = 0
         self.op_unfinished = []
-        self.current_op = [0 for _ in range(job_num)] 
+        self.current_op = [] 
 
         self.max_process_time = 0.
 
@@ -52,13 +53,16 @@ class Graph:
         src, tar = self.fully_connect(self.op_num, job.op_num)
         self.op_op_edge_src_idx = torch.cat((self.op_op_edge_src_idx, src.unsqueeze(0)), dim=1)
         self.op_op_edge_tar_idx = torch.cat((self.op_op_edge_tar_idx, tar.unsqueeze(0)), dim=1)
+        self.current_op.append(0)
+        
         for i in range(job.op_num):
             job.operations[i].node_id = self.op_num # set index of an op in the graph
             op = job.operations[i]
-            for machine_and_processtime in op.machine_and_processtime:
-                self.op_edge_idx    = torch.cat((self.op_edge_idx, torch.tensor([[self.op_num]])), dim=1)
-                self.m_edge_idx     = torch.cat((self.m_edge_idx, torch.tensor([[machine_and_processtime[0]]])), dim=1)
-                self.edge_x         = torch.cat((self.edge_x, torch.tensor([[machine_and_processtime[1]]])), dim=1)
+            self.op_edge_idx    = torch.cat((self.op_edge_idx,  torch.tensor([[self.op_num for _ in range(len(op.machine_and_processtime))]])), dim=1)
+            self.m_edge_idx     = torch.cat((self.m_edge_idx,   torch.tensor([[machine_and_processtime[0] for machine_and_processtime in op.machine_and_processtime]])), dim=1)
+            self.edge_x         = torch.cat((self.edge_x,       torch.tensor([[machine_and_processtime[1] for machine_and_processtime in op.machine_and_processtime]])), dim=1)
+
+            self.op_unfinished.append(self.op_num)
             self.op_num += 1
 
     def update_feature(self, jobs, machines, current_time):
