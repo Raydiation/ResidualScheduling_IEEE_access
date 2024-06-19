@@ -40,10 +40,8 @@ class Job:
 
         self.current_op_id = 0 
 
-        self.acc_expected_process_time = [0]
-        for op in self.operations[::-1]:
-            self.acc_expected_process_time.append(self.acc_expected_process_time[-1] + op.expected_process_time)
-        self.acc_expected_process_time = self.acc_expected_process_time[::-1]
+        self.acc_expected_process_time = list(accumulate([op.expected_process_time for op in self.operations[::-1]]))[::-1]
+
         
     def current_op(self):
         if self.current_op_id == -1:

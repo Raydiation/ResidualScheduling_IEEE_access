@@ -136,6 +136,8 @@ class Graph:
         _, self.op_edge_idx         = torch.unique(self.op_edge_idx, return_inverse=True)
         _, self.op_op_edge_src_idx  = torch.unique(self.op_op_edge_src_idx, return_inverse=True)
         _, self.op_op_edge_tar_idx  = torch.unique(self.op_op_edge_tar_idx, return_inverse=True)
+        
+        self.op_num -= 1
 
     def fully_connect(self, begin, size):
         adj_matrix = torch.ones((size, size))
