@@ -1,4 +1,5 @@
 import numpy as np
+from itertools import accumulate
 MAX = 1e6
 
 AVAILABLE = 0

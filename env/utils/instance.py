@@ -168,12 +168,16 @@ class JSP_Instance:
         
         candidates = np.where(avai_mat > 0)
         for i in range(len(candidates[0])):
+            m_id   = candidates[0][i]
+            job_id = candidates[1][i]
+            process_time = avai_mat[m_id][job_id]
+            
             avai_ops.append({
-                'm_id'          : candidates[0][i],
-                'job_id'        : candidates[1][i],
-                'op_id'         : self.jobs[candidates[1][i]].current_op_id,
-                'node_id'       : self.jobs[candidates[1][i]].current_op().node_id,
-                'process_time'  : avai_mat[candidates[0][i]][candidates[1][i]]
+                'm_id'          : m_id,
+                'job_id'        : job_id,
+                'op_id'         : self.jobs[job_id].current_op_id,
+                'node_id'       : self.jobs[job_id].current_op().node_id,
+                'process_time'  : process_time
             })
         if len(avai_ops) == 0:
             self.update_time()
